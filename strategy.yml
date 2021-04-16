@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+  - name: "Quick! Panic! We need a new corporate strategy"
+    ansible.builtin.uri:
+      url: https://strategy-madlibs.herokuapp.com/
+      return_content: true
+      body_format: json
+    register: strategy
+
+  - debug: 
+      msg: "{{ strategy.content | regex_search('<title>(.*)</title>', '\\1') }} + {{ strategy.content | regex_search('(Our strategy is .*).', '\\1') }}"
